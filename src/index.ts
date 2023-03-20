@@ -37,6 +37,16 @@ app.get("/treks/:trekId", async (req, res) => {
   res.send(JSON.stringify(rows[0]));
 });
 
+app.post("/treks", async (req, res) => {
+  const sql = `
+    INSERT INTO treks (title, description, image_url, duration, status) 
+    VALUES ('${req.body.title}', '${req.body.description}', '${req.body.image_url}', '${req.body.duration}', '${req.body.status}');
+  `
+  console.log(sql);
+  const { rows } = await pool.query(sql);
+  res.send(JSON.stringify(rows));
+});
+
 app.put("/treks/:trekId", async (req, res) => {
   console.log(req.body);
   const sql = `
@@ -46,13 +56,20 @@ app.put("/treks/:trekId", async (req, res) => {
       description='${req.body.description}',
       image_url='${req.body.image_url}',
       duration='${req.body.duration}',
-      status='${req.body.status}
+      status='${req.body.status}'
     WHERE id=${req.params.trekId};
   `
   console.log(sql);
   const { rows } = await pool.query(sql);
   res.send(JSON.stringify(rows));
 });
+
+app.delete("/treks/:trekId", async (req, res) => {
+  const sql = `DELETE FROM treks WHERE id=${req.params.trekId};`;
+  console.log(sql);
+  const { rows } = await pool.query(sql);
+  res.send(JSON.stringify(rows))
+})
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
