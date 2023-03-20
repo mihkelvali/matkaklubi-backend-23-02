@@ -47,6 +47,16 @@ app.post("/treks", async (req, res) => {
   res.send(JSON.stringify(rows));
 });
 
+app.post("/treks/:trekId/signup", async (req, res) => {
+  const sql = `
+    INSERT INTO customers (name, age, note, trek_id) 
+    VALUES ('${req.body.name}', ${req.body.age}, '${req.body.note}', ${req.params.trekId});
+  `
+  console.log(sql);
+  const { rows } = await pool.query(sql);
+  res.send(JSON.stringify(rows));
+});
+
 app.put("/treks/:trekId", async (req, res) => {
   console.log(req.body);
   const sql = `
